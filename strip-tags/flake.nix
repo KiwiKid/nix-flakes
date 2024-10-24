@@ -60,6 +60,10 @@
           };
         };
 
-        defaultPackage = self.packages.${system}.default;
+        overlay = final: prev: {
+          strip-tags = self.packages.${system}.default;
+        };
+
+        packages.${system}.default = self.packages.${system}.default;
       });
 }
