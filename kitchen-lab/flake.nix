@@ -6,21 +6,21 @@
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {
+    nixosModules.kioskModule = {
+      services.xserver.enable = true;
+      services.xserver.displayManager.auto.startx.enable = true;
+      services.xserver.windowManager.default = "none";
+
+      # Enable Firefox and configure it to start in kiosk mode
+      programs.firefox.enable = true;
+      services.xserver.displayManager.sessionCommands = ''
+        ${nixpkgs}/bin/firefox --kiosk www.google.com &
+      '';
+    };
+
     nixosConfigurations.kiosk = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [
-        {
-          services.xserver.enable = true;
-          services.xserver.displayManager.auto.startx.enable = true;
-          services.xserver.windowManager.default = "none";
-
-          # Enable Firefox and configure it to start in kiosk mode
-          programs.firefox.enable = true;
-          services.xserver.displayManager.sessionCommands = ''
-            ${inputs.nixpkgs}/bin/firefox --kiosk www.google.com &
-          '';
-        }
-      ];
+      modules = [ self.nixosModules.kioskModule ];
     };
   };
 }
