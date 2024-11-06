@@ -11,7 +11,7 @@ This configuration uses a flake stored in the `kitchen-lab` sub-folder of the `n
 { config, pkgs, ... }:
 
 let
-  remoteFlake = builtins.getFlake "github:KiwiKid/nix-flake";
+  remoteFlake = builtins.getFlake "github:KiwiKid/nix-flakes/kitchen-lab";
 in
 {
   imports = [
